@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "product")
-@NamedQueries(@NamedQuery(name="loadByType", query = "from Product where type.type = :type order by id"))
+@NamedQuery(name="loadByType", query = "from Product where type.type = :type order by id")
 public class Product extends CommonEntity {
 
     @Column(name = "name")

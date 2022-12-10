@@ -18,16 +18,16 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException e){
+    protected ResponseEntity<ApiResponse> handleEntityNotFound(EntityNotFoundException e){
         JsonNode node = JsonNodeFactory.instance.textNode(e.getMessage());
         ApiResponse response = new ApiResponse(HttpStatus.NOT_FOUND.value(), node);
-        return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(ReservationsExceededException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ResponseEntity<Object> handleReservationsExceeded(ReservationsExceededException e){
+    protected ResponseEntity<ApiResponse> handleReservationsExceeded(ReservationsExceededException e){
         JsonNode node = JsonNodeFactory.instance.textNode(e.getMessage());
         ApiResponse response = new ApiResponse(HttpStatus.BAD_REQUEST.value(), node, e.getResolvedLabels());
-        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

@@ -275,6 +275,8 @@ var CheckOut = {
         });
         $(element).find(".cancel").click(function(e){
              Ajax.post(Products.URI_CANCEL_RESERVATION, null, null, {}).then();
+             Loader.load();
+             Products.loadProductsByTypes();
         });
     }
 }

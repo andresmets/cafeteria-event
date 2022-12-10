@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product_type")
-@NamedQueries(@NamedQuery(name = "loadAllTypes", query = "from ProductType"))
+@NamedQuery(name = "loadAllTypes", query = "from ProductType")
 public class ProductType extends CommonEntity{
     @Column(name = "type")
     @Enumerated(EnumType.STRING)

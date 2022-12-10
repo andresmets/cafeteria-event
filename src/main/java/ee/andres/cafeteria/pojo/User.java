@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name="users")
-@NamedQueries(@NamedQuery(name="userByPrincipal", query = "from User u join fetch u.seller where u.username = :username"))
+@NamedQuery(name="userByPrincipal", query = "from User u join fetch u.seller where u.username = :username")
 public class User extends CommonEntity{
     @Column(name="username")
     private String username;

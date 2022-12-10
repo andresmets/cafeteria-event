@@ -7,10 +7,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "reservation", indexes = {@Index(unique = true, columnList = "id,seller_id")})
-    @NamedQueries(
-            {@NamedQuery(name="reservationOnDateBySeller", query = "from Reservation r outer join fetch r.product where r.seller.id = :id and date(r.transactionTime) = :date"),
-            @NamedQuery(name="reservationsOnDate", query = "from Reservation r outer join fetch r.product where date(r.transactionTime) = :date")}
-    )
+@NamedQuery(name="reservationOnDateBySeller", query = "from Reservation r outer join fetch r.product where r.seller.id = :id and date(r.transactionTime) = :date")
+@NamedQuery(name="reservationsOnDate", query = "from Reservation r outer join fetch r.product where date(r.transactionTime) = :date")
 public class Reservation extends CommonEntity {
     @OneToOne
     private Seller seller;
