@@ -19,10 +19,30 @@ import java.util.Locale;
 public class ProductServiceImpl extends AbstractServiceImpl<Product> implements ProductService {
 
     @Autowired
-    private ProductDao<Product> productDAO;
+    private ProductDao productDAO;
 
+    /**
+     * adds quantity to existing count
+     * @param id
+     * @param quantity
+     */
     @Override
     public void increaseQuantity(Long id, Integer quantity) {
+        Product product = getProductDAO().getById(id, Product.class);
+        if(product == null){
+            throw new EntityNotFoundException(String.format("product with id: %d cannot be found", id));
+        }
+        product.setQuantity(product.getQuantity() + quantity);
+        getProductDAO().update(product);
+    }
+
+    /**
+     * updates the product count with new count
+     * @param id
+     * @param quantity
+     */
+    @Override
+    public void setQuantity(Long id, Integer quantity) {
         Product product = getProductDAO().getById(id, Product.class);
         if(product == null){
             throw new EntityNotFoundException(String.format("product with id: %d cannot be found", id));
@@ -51,7 +71,7 @@ public class ProductServiceImpl extends AbstractServiceImpl<Product> implements 
         return new ApiResponse(HttpStatus.OK.value(), responseNode(Collections.singletonList(product)));
     }
 
-    public ProductDao<Product> getProductDAO() {
+    public ProductDao getProductDAO() {
         return productDAO;
     }
 

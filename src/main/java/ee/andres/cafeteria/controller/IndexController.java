@@ -8,6 +8,7 @@ import org.springframework.web.context.request.WebRequest;
 public class IndexController {
     @RequestMapping("/")
     public String index(WebRequest request){
-        return "index";
+        return "index.html";
     }
+
 }

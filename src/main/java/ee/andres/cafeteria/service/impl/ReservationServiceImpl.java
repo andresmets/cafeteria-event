@@ -145,8 +145,31 @@ public class ReservationServiceImpl extends AbstractServiceImpl<Reservation> imp
         if(reservation == null){
             throw new EntityNotFoundException("no active reservation");
         }
+        List<Product> products = reservation.getProduct();
+        updateProductCounts(products);
         getReservationDao().delete(reservation);
         return new ApiResponse(HttpStatus.OK.value());
+    }
+
+    private void updateProductCounts(List<Product> products){
+        Map<Long, Integer> counts = getLongIntegerMap(products);
+        Iterator<Long> it = counts.keySet().iterator();
+        while(it.hasNext()){
+            Long id = it.next();
+            getProductService().increaseQuantity(id, counts.get(id));
+        }
+    }
+
+    private Map<Long, Integer> getLongIntegerMap(List<Product> products) {
+        Map<Long, Integer> counts = new HashMap<>();
+        for(Product product : products){
+            if(!counts.containsKey(product.getId())){
+                counts.put(product.getId(), 1);
+                continue;
+            }
+            counts.put(product.getId(), counts.get(product.getId()) +1);
+        }
+        return counts;
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.Locale;
 
 public interface ProductService extends CommonService<Product> {
     void increaseQuantity(Long id, Integer quantity);
+    void setQuantity(Long id, Integer quantity);
     ApiResponse getProducts(Seller seller, ProductTypes type, Locale locale);
     ApiResponse getProductCountById(Long id);
     Product getProductById(Long id);

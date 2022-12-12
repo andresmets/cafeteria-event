@@ -10,7 +10,7 @@ ext {
 
 group = 'ee.andres'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '18'
 
 repositories {
 	mavenCentral()
@@ -22,13 +22,27 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
+	implementation 'org.springframework.boot:spring-boot-starter-tomcat:3.0.0' // instead of embedded default
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.13' //spring open api with annotations for boot with 1 and 2
+	//implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	/*spring-fox for documentation processing*/
+	//implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	//implementation group: 'io.springfox', name: 'springfox-oas', version: '3.0.0'
+
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0'
+	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+	implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+processResources {
+	from 'src/main/webapp'
+	into layout.buildDirectory.dir('resources')
+	include '**/*'
+}
+//swagger-ui/display rest api : can be used with spring-fox project

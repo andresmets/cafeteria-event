@@ -29,7 +29,8 @@ var Ajax = {
                         if(callback != null){
                             callback(response, config);
                         }
-                        resolve(response, config);
+                        response.config = config;
+                        resolve(response);
                     });
                 });
         }
@@ -274,9 +275,10 @@ var CheckOut = {
             Modals.addModalListeners(modal, callbacks);
         });
         $(element).find(".cancel").click(function(e){
-             Ajax.post(Products.URI_CANCEL_RESERVATION, null, null, {}).then();
              Loader.load();
-             Products.loadProductsByTypes();
+             Ajax.post(Products.URI_CANCEL_RESERVATION, null, null, {}).then((response) => {
+                Products.loadProductsByTypes();
+             });
         });
     }
 }
