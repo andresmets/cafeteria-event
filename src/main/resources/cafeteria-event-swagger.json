@@ -1,0 +1,403 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cafeteria event - OpenAPI 3.0",
+    "description": "Cafeteria event home assignement",
+    "termsOfService": "",
+    "contact": {
+      "email": "contact-email@contact.email"
+    },
+    "version": "0.0.1"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api/v3"
+    }
+  ],
+  "tags": [
+    {
+      "name": "product",
+      "description": "Product related REST queries",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "reservation",
+      "description": "Server side shopping basket related functionality",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "transaction",
+      "description": "Selling related REST queries"
+    }
+  ],
+  "paths": {
+    "/types": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "get availabel product types",
+        "description": "get all available non paginated product types (3 types, FOOD,CLOTHS, TOYS)",
+        "operationId": "getTypes",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{type}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Finds Pets by status",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findProductsByType",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "One of available product types",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "FOOD",
+              "enum": [
+                "FOOD",
+                "TOYS",
+                "CLOTHES"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product type not resolved"
+          }
+        }
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Finds Product by id",
+        "description": "one id can be provided",
+        "operationId": "Find product by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "get product by its id",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    },
+    "/quantity/{id}/{quantity}": {
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "summary": "set product quantity by amount / adds supplied quantity as a new quantity",
+        "description": "",
+        "operationId": "increaseByAmount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of the product",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "quantity",
+            "in": "path",
+            "description": "new quantity to be set",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "product not found"
+          }
+        }
+      }
+    },
+    "/reserved": {
+      "get": {
+        "tags": [
+          "reservation"
+        ],
+        "summary": "gets current total reserved products",
+        "description": "",
+        "operationId": "getReservations",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/basket": {
+      "get": {
+        "tags": [
+          "reservation"
+        ],
+        "summary": "Get current logged in user shopping basket",
+        "description": "Returns current reserved items",
+        "operationId": "getShoppingBasket",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/select": {
+      "post": {
+        "tags": [
+          "reservation"
+        ],
+        "summary": "Add product to the shopping basket",
+        "description": "if not present then creates a shopping basket and adds products as reservations to the shopping basket",
+        "operationId": "reserve",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductReservation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/remove": {
+      "post": {
+        "tags": [
+          "reservation"
+        ],
+        "summary": "remove product from shopping basket",
+        "description": "removes product from the shopping basket and removes the reservation- updating overall product count",
+        "operationId": "remove",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductReservation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    },
+    "/cancel": {
+      "post": {
+        "tags": [
+          "reservation"
+        ],
+        "summary": "cancel reservation",
+        "description": "removes server side shopping basekt and cancels reservations updating product counts",
+        "operationId": "cancelReservation",
+        "responses": {
+          "404": {
+            "description": "shopping basekt not found"
+          }
+        }
+      }
+    },
+    "/sell": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "commit transaction",
+        "description": "commit transaction",
+        "operationId": "sell",
+        "requestBody": {
+          "description": "transaction details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "shopping basekt not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+      "schemas": {
+        "ProductReservation": {
+          "type": "object",
+          "properties": {
+            "productId": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            }
+          }
+        },
+        "ApiResponse": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "response": {
+                "$ref": "#/components/schemas/JsonNode"
+              },
+              "labels": {
+                "$ref": "#/components/schemas/JsonNode"
+              }
+            }
+        },
+        "JsonNode" : {
+            "type": "object"
+        },
+        "Transaction" : {
+          "type" : "object",
+          "properties" : {
+            "received" : {
+              "type" : "number",
+              "format" : "double"
+            },
+            "returned": {
+              "type" : "number",
+              "format" : "double"
+            },
+            "amount": {
+              "type" : "number",
+              "format" : "double"
+            }
+          }
+        }
+      }
+    }
+}

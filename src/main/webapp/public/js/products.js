@@ -35,17 +35,19 @@ var Ajax = {
                 });
         }
 }
-
+var API = {
+    API_VERSION : "/api/v3"
+}
 var Products = {
     STATUS_200 : "200",
-    URI_TYPES : "/types",
-    URI_PRODUCTS : "/products/",
-    URI_PRODUCT: "/product/",
-    URI_RESERVED : "/reserved",
-    URI_SHOPPING_BASKET: "/basket",
-    URI_SELECT_ITEM: "/select",
-    URI_REMOVE_ITEM: "/remove",
-    URI_CANCEL_RESERVATION: "/cancel",
+    URI_TYPES : API.API_VERSION.concat("/types"),
+    URI_PRODUCTS : API.API_VERSION.concat("/products/"),
+    URI_PRODUCT: API.API_VERSION.concat("/product/"),
+    URI_RESERVED : API.API_VERSION.concat("/reserved"),
+    URI_SHOPPING_BASKET: API.API_VERSION.concat("/basket"),
+    URI_SELECT_ITEM: API.API_VERSION.concat("/select"),
+    URI_REMOVE_ITEM: API.API_VERSION.concat("/remove"),
+    URI_CANCEL_RESERVATION: API.API_VERSION.concat("/cancel"),
 
     loadTypes : function(){
         return Ajax.load(Products.URI_TYPES, Products.addTypes)
