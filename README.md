@@ -10,7 +10,7 @@ PostgreSQL 15 database<br/>
 Swagger-ui for testing and documenting the REST services<br/>
 gradle build system<br/>
 
-#Running the application<br/>
+# Running the application<br/>
 ./gradlew bootRun from the sources location<br/>
 java -jar cafeteria-event-0.0.1-SNAPSHOT.jar<br/>
 
