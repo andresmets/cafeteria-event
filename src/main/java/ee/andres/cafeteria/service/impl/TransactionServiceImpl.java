@@ -10,6 +10,7 @@ import ee.andres.cafeteria.pojo.SoldItems;
 import ee.andres.cafeteria.response.ApiResponse;
 import ee.andres.cafeteria.service.ReservationService;
 import ee.andres.cafeteria.service.TransactionService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class TransactionServiceImpl extends AbstractServiceImpl<SoldItems> imple
     @Override
     public ApiResponse commitTransaction(Seller seller, JsonNode transactionInfo) {
         Reservation reservation = reservationService.getSellerReservationOnDate(seller, new Date());
+        if(reservation == null){
+            throw new EntityNotFoundException("reservation is missing");
+        }
         List<Product> products = new ArrayList<>();
         products.addAll(reservation.getProduct());
         reservation.setProduct(null);

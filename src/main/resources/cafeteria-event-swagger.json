@@ -55,7 +55,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ApiResponseTypes"
                 }
               }
             }
@@ -95,10 +95,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
+                  "$ref": "#/components/schemas/ApiResponseProduct"
                 }
               }
             }
@@ -136,10 +133,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
+                  "$ref": "#/components/schemas/ApiResponseProduct"
                 }
               }
             }
@@ -200,7 +194,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ApiResponseReserved"
                 }
               }
             }
@@ -222,7 +216,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ApiResponseBasket"
                 }
               }
             }
@@ -258,7 +252,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ApiResponseSelect"
                 }
               }
             }
@@ -289,7 +283,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ApiResponseSelect"
                 }
               }
             }
@@ -352,52 +346,247 @@
     }
   },
   "components": {
-      "schemas": {
-        "ProductReservation": {
-          "type": "object",
-          "properties": {
-            "productId": {
-              "type": "integer",
-              "format": "int64",
-              "example": 10
-            }
+    "schemas": {
+      "ProductReservation": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
           }
-        },
-        "ApiResponse": {
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "response": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "labels": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        }
+      },
+      "JsonNode": {
+        "type": "object"
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "received": {
+            "type": "number",
+            "format": "double"
+          },
+          "returned": {
+            "type": "number",
+            "format": "double"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "type": {
+            "type": "string",
+            "description": "product type enum constant",
+            "enum": [
+              "FOOD",
+              "TOYS",
+              "CLOTHES"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "type description"
+          }
+        }
+      },
+      "Label": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/Type"
+          },
+          "price": {
+            "type": "number",
+            "format": "integer"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "integer"
+          },
+          "dateUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "Seller": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "hiredOnDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Reservation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "seller": {
+            "$ref": "#/components/schemas/Seller"
+          },
+          "product": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            }
+          },
+          "transactionTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseTypes": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "response": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Type"
+            }
+          },
+          "labels": {
+            "$ref": "#/components/schemas/Label"
+          }
+        }
+      },
+      "ApiResponseProduct": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "response": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            }
+          },
+          "labels": {
+            "$ref": "#/components/schemas/Label"
+          }
+        }
+      },
+      "ApiResponseReserved": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "response": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "labels": {
+            "$ref": "#/components/schemas/Label"
+          }
+        }
+      },
+      "ApiResponseBasket": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "response": {
             "type": "object",
             "properties": {
-              "status": {
-                "type": "integer",
-                "format": "int64"
+              "reservation": {
+                "type": "object",
+                "$ref": "#/components/schemas/Reservation"
               },
-              "response": {
-                "$ref": "#/components/schemas/JsonNode"
-              },
-              "labels": {
-                "$ref": "#/components/schemas/JsonNode"
+              "totals": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
               }
             }
-        },
-        "JsonNode" : {
-            "type": "object"
-        },
-        "Transaction" : {
-          "type" : "object",
-          "properties" : {
-            "received" : {
-              "type" : "number",
-              "format" : "double"
-            },
-            "returned": {
-              "type" : "number",
-              "format" : "double"
-            },
-            "amount": {
-              "type" : "number",
-              "format" : "double"
+          },
+          "labels": {
+            "$ref": "#/components/schemas/Label"
+          }
+        }
+      },
+      "ApiResponseSelect": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "response": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Reservation"
             }
+          },
+          "labels": {
+            "$ref": "#/components/schemas/Label"
           }
         }
       }
     }
+  }
 }
