@@ -10,7 +10,12 @@ ext {
 
 group = 'ee.andres'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '18'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -26,6 +31,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat:3.0.0' // instead of embedded default
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'commons-codec:commons-codec:1.11'
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+	implementation group: 'org.antlr', name: 'antlr4-runtime', version: '4.10.1'
+
 }
 
 tasks.named('test') {
@@ -36,4 +45,7 @@ processResources {
 	from 'src/main/webapp'
 	into layout.buildDirectory.dir('resources')
 	include '**/*'
+}
+bootJar {
+	mainClass= 'ee.andres.cafeteria.CafeteriaEventApplication'
 }

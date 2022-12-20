@@ -1,14 +1,15 @@
-FROM postgres
-ENV POSTGRES_PASSWORD postgres
+FROM openjdk:18 AS JAVA_18
+FROM gradle:7.5.1 AS BUILD_STAGE
+ENV APP_HOME=/usr/app
 
+RUN mkdir $APP_HOME
 
-FROM openjdk:18
+WORKDIR $APP_HOME
+
+COPY . $APP_HOME
+RUN gradle clean build
+ENV EXECUTABLE=$APP_HOME/build/libs/cafeteria-event-0.0.1-SNAPSHOT.jar
+ENTRYPOINT java -jar $EXECUTABLE
 
 EXPOSE 8080
 
-RUN mkdir /app
-RUN mkdir /pgdata
-
-COPY build/libs/cafeteria-event-0.0.1-SNAPSHOT.jar /app/spring-boot-application.jar
-
-ENTRYPOINT ["java","-DLOG_FILE=/app/logs/application.log","-jar","/app/spring-boot-application.jar"]

@@ -107,4 +107,7 @@ button.cancel{
     color: red;
     font-weight:bolder;
 }
+.read-only{
+    filter:grayscale(1);
+}
 

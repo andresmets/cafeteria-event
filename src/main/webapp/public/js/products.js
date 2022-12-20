@@ -81,6 +81,11 @@ var Products = {
                 let reserved = (apiResponse != null && apiResponse.response[productId] != undefined) ? apiResponse.response[productId] : 0;
                 let counts = $(value).find(".counts");
                 $(counts).text(Formats.formatItemCounts($(counts).data("item-count"), reserved));
+                if(parseInt($(counts).data("item-count")) == 0){
+                    Products.setItemReadOnly(value, true);
+                }else{
+                    Products.setItemReadOnly(value, false);
+                }
             });
         }
     },
@@ -151,6 +156,13 @@ var Products = {
     },
     getProductTypeContainer : function(config){
         return  $(".row *[data-type=" + config.type + "]").parent();
+    },
+    setItemReadOnly : function(element, toggle){
+        if(toggle){
+            $(element).addClass("read-only")
+        }else{
+            $(element).removeClass("read-only")
+        }
     },
     domReadyHandler : function(){
         Products.loadTypes().then(function(){
@@ -263,15 +275,10 @@ var CheckOut = {
                })
             },
             ()=>{
-                $(modal).find(".received").on("mouseout", (e) => {
-                    $(modal).find(".error").remove();
-                    if(Validator.validateCheckOut(modal)){
-                        CheckOut.setAmountReturned(modal);
-                     }else{
-                        Exception.handleCashNotReceived(e, modal, templateObject);
-                     }
-
-                });
+                CheckOut.addCheckoutEventListener(modal, ".received", "mouseout", templateObject);
+            },
+            ()=>{
+                CheckOut.addCheckoutEventListener(modal, ".received", "change", templateObject);
                }
             ];
             Modals.addModalListeners(modal, callbacks);
@@ -282,6 +289,16 @@ var CheckOut = {
                 Products.loadProductsByTypes();
              });
         });
+    },
+    addCheckoutEventListener : function(modal,selector,event, templateObject){
+            $(modal).find(selector).on(event, (e) => {
+                    $(modal).find(".error").remove();
+                    if(Validator.validateCheckOut(modal)){
+                        CheckOut.setAmountReturned(modal);
+                     }else{
+                        Exception.handleCashNotReceived(e, modal, templateObject);
+                     }
+                });
     }
 }
 $(document).ready(
