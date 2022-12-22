@@ -34,6 +34,7 @@ rather than the ports specified with binding directive -p)*
 ##Prerequisites
 - Local Windows Docker client needs to be installed
 - Application and database service need to be deployed from separate projects (separate compose.yaml files - ports exposing issue, check the image docker-port-binding-image.png)
+- IntelliJ IDEA community edition (optional for docker port exposing)
 ### Expose database and application ports
 IntelliJ IDEA Docker plugin's "Port Bindings" view can be used to expose the ports in docker container (local docker client)
 
