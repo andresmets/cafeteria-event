@@ -18,7 +18,7 @@ Before running the application it is needed to supply the database.host variable
 Application comes with docker default localhost configuration(windows client) (database.host=172.17.0.2-  [why IP is used in docker conf](#Running-in-docker-container)<br/>
 - ./gradlew bootRun from the sources location<br/>
 - java -jar cafeteria-event-0.0.1-SNAPSHOT.jar<br/>
-- ## two users
+- ## two web application users
 - user_one, pwd_one
 - user_two, pwd_two
 # Application URL's <br/>
