@@ -47,14 +47,18 @@ h2{
     z-index: 100;
     top: 0px;
     left: 0px;
-    width: 100%;
-    height: 100%;
     text-align: center;
     background-color: white;
     background-position: center;
 }
 .loader{
     background-image: url('/icons/Spin-1s-200px.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.loader-pulse{
+    height:20px;
+    background-image: url('/icons/Pulse-1s-200px.svg');
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -109,5 +113,9 @@ button.cancel{
 }
 .read-only{
     filter:grayscale(1);
+}
+.price{
+    text-align:center;
+    color: lightsteelblue;
 }
 

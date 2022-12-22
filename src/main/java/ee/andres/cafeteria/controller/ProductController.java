@@ -31,7 +31,7 @@ public class ProductController {
     }
     @GetMapping(path = "/product/{id}")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable(value = "id") Long id){
-        ApiResponse response = getProductService().getProductCountById(id);
+        ApiResponse response = getProductService().getProductResponseById(id);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
     @PostMapping(path = "/quantity/{id}/{quantity}")

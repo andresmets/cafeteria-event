@@ -514,10 +514,7 @@
             "format": "int64"
           },
           "response": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Product"
-            }
+            "$ref": "#/components/schemas/Product"
           },
           "labels": {
             "$ref": "#/components/schemas/Label"
@@ -577,10 +574,7 @@
             "format": "int64"
           },
           "response": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Reservation"
-            }
+            "$ref": "#/components/schemas/Reservation"
           },
           "labels": {
             "$ref": "#/components/schemas/Label"

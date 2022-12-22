@@ -10,8 +10,9 @@ import ee.andres.cafeteria.pojo.SoldItems;
 import ee.andres.cafeteria.response.ApiResponse;
 import ee.andres.cafeteria.service.ReservationService;
 import ee.andres.cafeteria.service.TransactionService;
-import jakarta.persistence.EntityNotFoundException;
+import ee.andres.cafeteria.validator.BusinessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,24 +23,20 @@ import java.util.List;
 @Service("TransactionServiceImpl")
 public class TransactionServiceImpl extends AbstractServiceImpl<SoldItems> implements TransactionService {
 
-    private static final String REQUEST_ATTR_CASH_RECEIVED = "received";
-    private static final String REQUEST_ATTR_CASH_RETURNED = "returned";
-    private static final String REQUEST_ATTR_TOTAL_AMOUNT = "amount";
-
-
     @Autowired
     private ReservationService reservationService;
     @Autowired
     private SoldItemsDao soldItemsDao;
     @Autowired
     private CurrencyAmountFormatter currencyAmountFormatter;
+    @Autowired
+    @Qualifier("TransactionValidatorImpl")
+    private BusinessValidator<Reservation> transactionValidator;
 
     @Override
     public ApiResponse commitTransaction(Seller seller, JsonNode transactionInfo) {
-        Reservation reservation = reservationService.getSellerReservationOnDate(seller, new Date());
-        if(reservation == null){
-            throw new EntityNotFoundException("reservation is missing");
-        }
+        Reservation reservation = getReservationService().getSellerReservationOnDate(seller, new Date());
+        getTransactionValidator().validate(reservation, transactionInfo);
         List<Product> products = new ArrayList<>();
         products.addAll(reservation.getProduct());
         reservation.setProduct(null);
@@ -65,5 +62,9 @@ public class TransactionServiceImpl extends AbstractServiceImpl<SoldItems> imple
 
     public CurrencyAmountFormatter getCurrencyAmountFormatter() {
         return currencyAmountFormatter;
+    }
+
+    public BusinessValidator<Reservation> getTransactionValidator() {
+        return transactionValidator;
     }
 }

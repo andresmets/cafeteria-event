@@ -48,4 +48,5 @@ processResources {
 }
 bootJar {
 	mainClass= 'ee.andres.cafeteria.CafeteriaEventApplication'
+	archiveName("cafeteria-event.jar")
 }

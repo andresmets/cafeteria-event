@@ -23,8 +23,8 @@ public class ProductServiceImpl extends AbstractServiceImpl<Product> implements 
 
     /**
      * adds quantity to existing count
-     * @param id
-     * @param quantity
+     * @param id product id
+     * @param quantity product quantity
      */
     @Override
     public void increaseQuantity(Long id, Integer quantity) {
@@ -38,8 +38,8 @@ public class ProductServiceImpl extends AbstractServiceImpl<Product> implements 
 
     /**
      * updates the product count with new count
-     * @param id
-     * @param quantity
+     * @param id product id
+     * @param quantity product quantity
      */
     @Override
     public void setQuantity(Long id, Integer quantity) {
@@ -63,12 +63,12 @@ public class ProductServiceImpl extends AbstractServiceImpl<Product> implements 
     }
 
     @Override
-    public ApiResponse getProductCountById(Long id) {
+    public ApiResponse getProductResponseById(Long id) {
         Product product = getProductById(id);
         if(product == null){
             throw new EntityNotFoundException("product not found: " + id);
         }
-        return new ApiResponse(HttpStatus.OK.value(), responseNode(Collections.singletonList(product)));
+        return new ApiResponse(HttpStatus.OK.value(), responseObject(product));
     }
 
     public ProductDao getProductDAO() {

@@ -10,7 +10,10 @@ insert into product(id,name,type_id,price,quantity,date_updated,product_image) v
 insert into product(id,name,type_id,price,quantity,date_updated,product_image) values(7, 'Pants',2,300,36,CURRENT_TIMESTAMP,'icons/pants.png');
 insert into product(id,name,type_id,price,quantity,date_updated,product_image) values(8, 'Jacket',2,400,4,CURRENT_TIMESTAMP,'icons/jacket.png');
 insert into product(id,name,type_id,price,quantity,date_updated,product_image) values(9, 'Toy',3,100,10,CURRENT_TIMESTAMP,'icons/toy.png');
-insert into retail_seller(id,name,hired_on) values(1,'retail seller',current_date);
-insert into users(id,username,password,enabled,seller_id)values(1,'user','{noop}pwd',true,1);
-insert into authorities(id,username,authority)values(1,'user','ROLE_USER');
+insert into retail_seller(id,name,hired_on) values(1,'retail seller one',current_date);
+insert into users(id,username,password,enabled,seller_id)values(1,'user_one','{noop}pwd_one',true,1);
+insert into authorities(id,username,authority)values(1,'user_one','ROLE_USER');
+insert into retail_seller(id,name,hired_on) values(2,'retail seller two',current_date);
+insert into users(id,username,password,enabled,seller_id)values(2,'user_two','{noop}pwd_two',true,2);
+insert into authorities(id,username,authority)values(2,'user_two','ROLE_USER');
 

@@ -23,7 +23,7 @@ public class RestExceptionHandler {
         ApiResponse response = new ApiResponse(HttpStatus.NOT_FOUND.value(), node);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(ReservationsExceededException.class)
+    @ExceptionHandler({ReservationsExceededException.class, TransactionAmountException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseEntity<ApiResponse> handleReservationsExceeded(ReservationsExceededException e){
         JsonNode node = JsonNodeFactory.instance.textNode(e.getMessage());

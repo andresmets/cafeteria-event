@@ -53,20 +53,24 @@ public class ReservationServiceImpl extends AbstractServiceImpl<Reservation> imp
 
     private Map<Long, Integer> getReservationTotals(List<Reservation> reservations) {
         Map<Long, Integer> map = new HashMap<>();
-        if (reservations != null) {
+        if (Optional.ofNullable(reservations).isPresent()) {
             for (Reservation r : reservations) {
-                if (r != null && r.getProduct() != null) {
-                    for (Product p : r.getProduct()) {
-                        if (!map.containsKey(p.getId())) {
-                            map.put(p.getId(), 1);
-                            continue;
-                        }
-                        map.put(p.getId(), map.get(p.getId()) + 1);
-                    }
-                }
+                addReservationTotals(map, r);
             }
         }
         return map;
+    }
+
+    private void addReservationTotals(Map<Long, Integer> map, Reservation r) {
+        if (Optional.ofNullable(r).isPresent() && Optional.ofNullable(r.getProduct()).isPresent()) {
+            for (Product p : r.getProduct()) {
+                if (!map.containsKey(p.getId())) {
+                    map.put(p.getId(), 1);
+                    continue;
+                }
+                map.put(p.getId(), map.get(p.getId()) + 1);
+            }
+        }
     }
 
     @Override
@@ -89,7 +93,7 @@ public class ReservationServiceImpl extends AbstractServiceImpl<Reservation> imp
             reservation.getProduct().add(product);
             update(reservation);
         }
-        return new ApiResponse(HttpStatus.OK.value(), responseNode(Collections.singletonList(reservation)));
+        return new ApiResponse(HttpStatus.OK.value(), responseObject(reservation));
     }
 
     private Product getProduct(Long productId) {
@@ -153,9 +157,7 @@ public class ReservationServiceImpl extends AbstractServiceImpl<Reservation> imp
 
     private void updateProductCounts(List<Product> products){
         Map<Long, Integer> counts = getLongIntegerMap(products);
-        Iterator<Long> it = counts.keySet().iterator();
-        while(it.hasNext()){
-            Long id = it.next();
+        for (Long id : counts.keySet()) {
             getProductService().increaseQuantity(id, counts.get(id));
         }
     }

@@ -18,6 +18,7 @@
             <script type="text/html" id="item-template">
                 <div class="shopping-item" data-template-bind='[{"attribute": "data-item-id", "value": "id"}]'>
                     <div class="counts" data-template-bind='[{"attribute": "data-item-count", "value": "quantity"}]'></div>
+                    <div class="price" data-content='price' data-format="itemPriceFormatter"></div>
                     <img class="item-name" data-template-bind='[{"attribute": "src", "value": "imageUrl"}, {"attribute": "data-item-id", "value": "id"}]'></img>
                     <div class="basket">
                         <div class="label" data-content="labelInBasket"></div>

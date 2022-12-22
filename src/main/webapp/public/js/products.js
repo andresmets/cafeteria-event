@@ -69,6 +69,7 @@ var Products = {
         }
         $(productItems).find(".shopping-item .item-name").each(function(index, element){
             $(element).click(Products.productClickHandler);
+            $(element).on("mouseover", Products.productMouseOverHandler);
         });
         $(productItems).find(".icon.delete .delete").each((index, element)=>{
             $(element).click(Products.removeFromBasket)
@@ -81,12 +82,21 @@ var Products = {
                 let reserved = (apiResponse != null && apiResponse.response[productId] != undefined) ? apiResponse.response[productId] : 0;
                 let counts = $(value).find(".counts");
                 $(counts).text(Formats.formatItemCounts($(counts).data("item-count"), reserved));
+                Products.toggleReadonly(value, parseInt($(counts).data("item-count")));
+                /*
                 if(parseInt($(counts).data("item-count")) == 0){
                     Products.setItemReadOnly(value, true);
                 }else{
                     Products.setItemReadOnly(value, false);
-                }
+                }*/
             });
+        }
+    },
+    toggleReadonly : function(element, count){
+        if(count == 0){
+            Products.setItemReadOnly(element, true);
+        }else{
+            Products.setItemReadOnly(element, false);
         }
     },
     addShoppingBasket : function(apiResponse, config){
@@ -164,6 +174,22 @@ var Products = {
             $(element).removeClass("read-only")
         }
     },
+    productMouseOverHandler : function(e){
+        let item = $(e.target).closest(".shopping-item");
+        let counts = $(item).find(".counts");
+        $(counts).text("");
+        let loader = Loader.getPulseLoader(counts);
+        let count, reserved;
+        const product = Ajax.load(Products.URI_PRODUCT.concat($(item).data("item-id")), (response, config) => {count = response.response.quantity;$(counts).data("item-count", count) }, null);
+        const total = Ajax.load(Products.URI_RESERVED, (response, config) => {reserved = response.response[$(item).data("item-id")] != undefined ? response.response[$(item).data("item-id")] : 0}, null);
+        const promises = [product, total];
+        Promise.allSettled(promises).then((results) => {
+                $(counts).text(Formats.formatItemCounts(count, reserved));
+                Products.toggleReadonly(item, count);
+                Loader.hideLoader(loader);
+            }
+        );
+    },
     domReadyHandler : function(){
         Products.loadTypes().then(function(){
             Products.loadProductsByTypes();
@@ -184,10 +210,48 @@ var Formats = {
         return ("").concat(items).concat(" / ").concat(reserved);
     }
 }
+var Overlay = {
+    getOverlayDimensions : function(){
+        let dimensions = {
+            height: $("html")[0].getBoundingClientRect().height,
+            width: $("html")[0].getBoundingClientRect().width
+        }
+        return dimensions;
+    },
+    appendOverlay : function(){
+        let overlay = $("<div class=\"overlay loader\"></div>");
+        let dimensions = Overlay.getOverlayDimensions();
+        $(overlay).height(dimensions.height);
+        $(overlay).width(dimensions.width);
+        $("body").append(overlay);
+    },
+    positionOverlay : function(overlay){
+        let overlayDimensions = Overlay.getOverlayDimensions();
+        $(overlay).height(overlayDimensions.height);
+        $(overlay).width(overlayDimensions.width);
+    }
+}
 var Loader = {
+    PULSE_LOADER_SELECTOR : ".loader-pulse",
     load : function(){
-        $("body").append("<div class=\"overlay loader\"></div>");
-        $(".loader").fadeOut(2000, () => {$(".loader").remove()})
+        Overlay.appendOverlay();
+        $(".loader").fadeOut(2000, () => {$(".overlay.loader").remove()})
+    },
+    addPulseLoader : function(element){
+        let loader = $("<div class=\"loader-pulse\"></div>");
+        $(element).append(loader);
+        return loader;
+    },
+    getPulseLoader : function(element){
+        let loader = $(element).find(Loader.PULSE_LOADER_SELECTOR);
+        if($(loader).length > 0){
+            return loader;
+        }else{
+            return Loader.addPulseLoader(element);
+        }
+    },
+    hideLoader : function(loader){
+        $(loader).remove();
     }
 }
 var Modals = {
@@ -260,6 +324,7 @@ var CheckOut = {
             { append: true, isFile: false, afterInsert:
                  function(element){
                      Modals.positionModal($(element).find(".modal"));
+                     Overlay.positionOverlay($(element));
                  }
              });
             let modal = $(element).find("#shopping-basket");
@@ -301,8 +366,28 @@ var CheckOut = {
                 });
     }
 }
+var Responsive = {
+    domReadyHandler : function(){
+        $(window).on("resize", () =>{
+            if($(".overlay").length > 0){
+                $(".overlay").height($("html")[0].getBoundingClientRect().height);
+                $(".overlay").width($("html")[0].getBoundingClientRect().width);
+            }
+            if($(".modal").length > 0){
+                Modals.positionModal($(".modal"));
+            }
+        });
+    }
+}
+$.addTemplateFormatter("itemPriceFormatter",
+    function(value, template) {
+        return  parseInt(value)/100 + '\u20AC';
+});
+
 $(document).ready(
     function(){
         Products.domReadyHandler();
+        Responsive.domReadyHandler();
     }
 );
+
