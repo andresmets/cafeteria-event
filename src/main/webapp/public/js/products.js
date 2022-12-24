@@ -83,12 +83,6 @@ var Products = {
                 let counts = $(value).find(".counts");
                 $(counts).text(Formats.formatItemCounts($(counts).data("item-count"), reserved));
                 Products.toggleReadonly(value, parseInt($(counts).data("item-count")));
-                /*
-                if(parseInt($(counts).data("item-count")) == 0){
-                    Products.setItemReadOnly(value, true);
-                }else{
-                    Products.setItemReadOnly(value, false);
-                }*/
             });
         }
     },
