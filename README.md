@@ -32,7 +32,7 @@ through IntelliJ IDEA community edition's Docker plugin's "Port Bindings" view.
 *(if adding -p 5432:5432 to the docker executable command then port bindings take effect as specified)*
 ##Prerequisites
 - Local Windows Docker client needs to be installed
-- Application and database service need to be deployed from separate projects (separate compose.yaml files - ports exposing issue, check the image docker-port-binding-image.png)
+- Application and database service need to be deployed from separate projects (separate compose.yaml files - network hosts resolving issue, port bindings need to be specified with -p parameter in the docker executable command/port bindings can be specified later with IntelliJ IDEA docker plugin- docker-port-binding-image.png)
 - IntelliJ IDEA community edition (optional for docker port exposing)
 ### Expose database and application ports
 IntelliJ IDEA Docker plugin's "Port Bindings" view can be used to expose the ports in docker container (local docker client)
