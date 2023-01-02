@@ -29,8 +29,7 @@ http://localhost:8080/swagger/index.html - swagger REST endpoints documentation<
 While in my Windows environment the docker default way of setting the containers on the same network with network type=bridge and auto-exposing
 the ports did not work then I am using the default IP(172.17.0.2) and exposing the database port for database service and application 
 through IntelliJ IDEA community edition's Docker plugin's "Port Bindings" view.
-*(docker client exposes ports with -P "Randomly publish all exposed ports" but system defaults for outside connections are added
-rather than the ports specified with binding directive -p)*
+*(if adding -p 5432:5432 to the docker executable command then port bindings take effect as specified)*
 ##Prerequisites
 - Local Windows Docker client needs to be installed
 - Application and database service need to be deployed from separate projects (separate compose.yaml files - ports exposing issue, check the image docker-port-binding-image.png)
